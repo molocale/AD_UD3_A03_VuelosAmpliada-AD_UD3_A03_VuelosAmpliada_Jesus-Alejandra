@@ -16,9 +16,8 @@ public class Pasajero {
 	
 	public Pasajero() {}
 	
-	public Pasajero(Controlador miControlador, int asiento, String dni_pasajero, String apellido, String nombre,
+	public Pasajero(int asiento, String dni_pasajero, String apellido, String nombre,
 			String dni_pagador, int tarjeta, String codigo_venta) {
-		this.miControlador = miControlador;
 		this.asiento = asiento;
 		this.dni_pasajero = dni_pasajero;
 		this.apellido = apellido;

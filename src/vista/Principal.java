@@ -9,21 +9,21 @@ public class Principal {
 		Controlador miControlador = new Controlador();
 		Principal miVista = new Principal();
 		miControlador.setMiVista(miVista);
-		miControlador.ejecucion();
+		System.out.println("¡Bienvenido a nuestra Aerolínea!");
+		while (miControlador.ejecucion())
+			;
+
 	}
 
-	public int respuestas(String pregunta) {
+	public int respuestas(String pregunta, boolean respuesta) {
+		int miRespuesta = -1;
 
 		System.out.println(pregunta);
 		Scanner in = new Scanner(System.in);
-		int miRespuesta = in.nextInt();
+		if (respuesta) {
+			miRespuesta = in.nextInt();
+		}
 		return miRespuesta;
-
-	}
-
-	public void pintar(String sysos) {
-
-		System.out.println(sysos);
 
 	}
 

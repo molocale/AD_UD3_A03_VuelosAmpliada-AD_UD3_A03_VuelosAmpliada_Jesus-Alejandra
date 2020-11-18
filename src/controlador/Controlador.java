@@ -17,27 +17,46 @@ public class Controlador {
 		this.miVista = miVista;
 	}
 
-	public void ejecucion() {
+	public boolean ejecucion() {
+		boolean repetimos = true;
 		int opcionElegida = miVista
-				.respuestas("¿Que quieres hacer? COMPRAR VUELO (1) / CANCELAR VUELO (2) / MODIFICAR VUELO (3)");
+				.respuestas("¿Qué quiere hacer? COMPRAR VUELO (1) / CANCELAR VUELO (2) / MODIFICAR VUELO (3)", true);
 		switch (opcionElegida) {
 		case 1:
-			Pasajero miPasajero = new Pasajero();
-			miVista.pintar(miMongo.comprarVuelo());
+			//En comprar:
+			//enseñar todos darle a elegir 
+			//recoger los datos 
+			//meter los datos en el vuelo elegido
+			
 			break;
 
 		case 2:
-			miVista.pintar(miMongo.cancelarVuelo(null));
+			
+			//en cancelar:
+			//pedirle el dni y enseñarle los vuelos asociados a su dni
+			//borrar el que elija
+			
 			break;
 		case 3:
-			miVista.pintar(miMongo.modificarVuelo(null));
+			//en modificar:
+			//pedirle el dni y enseñarle los vuelos asociados a su dni
+			//recoger los cambios
+			//aplicar los cambios y guardarlos
 			break;
 
 		default:
-			miVista.pintar("Valor no valido");
-			ejecucion();
+			//si lo mete mal
 
 		}
+		
+		
+		
+		//un desea continuar haciendo otra cosa si desea true si no false:
+		/*if(no desea continuar) {
+			repetimos= false;
+		}*/
+		
+		return repetimos;
 
 	
 	}

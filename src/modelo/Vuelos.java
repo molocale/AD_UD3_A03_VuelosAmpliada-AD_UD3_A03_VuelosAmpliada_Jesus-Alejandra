@@ -1,11 +1,11 @@
 package modelo;
-import controlador.Controlador;
+
+import java.util.HashMap;
 
 public class Vuelos {
-	
-	Controlador miControlador;
-	
-	
+
+	// Controlador miControlador;
+
 	private int id_vuelo;
 	private String codigo_vuelo;
 	private String origen;
@@ -14,11 +14,21 @@ public class Vuelos {
 	private String hora;
 	private int plazas_totales;
 	private int plazas_disponibles;
-	private Pasajero vendidos;
-	
-	public Vuelos() {}
+	private HashMap<Integer, Pasajero> vendidos;
 
-
+	public Vuelos(int id_vuelo, String codigo_vuelo, String origen, String destino, String fecha, String hora,
+			int plazas_totales, int plazas_disponibles, HashMap<Integer, Pasajero> vendidos) {
+		super();
+		this.id_vuelo = id_vuelo;
+		this.codigo_vuelo = codigo_vuelo;
+		this.origen = origen;
+		this.destino = destino;
+		this.fecha = fecha;
+		this.hora = hora;
+		this.plazas_totales = plazas_totales;
+		this.plazas_disponibles = plazas_disponibles;
+		this.vendidos = vendidos;
+	}
 
 	public int getId_vuelo() {
 		return id_vuelo;
@@ -83,7 +93,5 @@ public class Vuelos {
 	public void setPlazas_disponibles(int plazas_disponibles) {
 		this.plazas_disponibles = plazas_disponibles;
 	}
-	
-
 
 }

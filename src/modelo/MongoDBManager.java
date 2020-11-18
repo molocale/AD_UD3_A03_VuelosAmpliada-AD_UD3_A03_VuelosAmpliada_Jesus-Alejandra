@@ -12,34 +12,38 @@ import com.mongodb.client.MongoDatabase;
 
 public class MongoDBManager {
 	private MongoClient mongo;
-	private MongoDatabase db;
 	private MongoCollection coleccion;
 
 	
 	public MongoDBManager() {
 
 		this.mongo = new MongoClient("localhost", 27017);
-		this.db = mongo.getDatabase("vuelos2_0");
+		 MongoDatabase db = mongo.getDatabase("vuelos2_0");
 		this.coleccion = db.getCollection("vuelos");
 	}
 	
-	public String comprarVuelo() {
-		return "Vuelo comprado con exito";
+	public boolean comprarVuelo() {
+		return true;
 		
 	}
 	
-	public String cancelarVuelo(Pasajero miPasajero) {
-		return "Vuelo cancelado con exito";
+	public boolean cancelarVuelo(Pasajero miPasajero, Vuelos vuelo) {
+		return true;
 		
 	}
 	
-	public String modificarVuelo(Pasajero miPasajero) {
-		return "Vuelo modificado con exito";
+	public boolean modificarVuelo(Pasajero miPasajero, Vuelos vuelo) {
+		return true;
 		
 	}
 	
-	public HashMap<Integer, Vuelos> mostrarVuelos() {
-		// TODO Auto-generated method stub
+	public HashMap<Integer, Vuelos> mostrarTodosLosVuelos() {
+		HashMap<Integer, Vuelos> miVueloBBDD = new HashMap<Integer, Vuelos>();
+
+		return miVueloBBDD;
+	}
+	
+	public HashMap<Integer, Vuelos> mostrarVuelosDelCliente() {
 		HashMap<Integer, Vuelos> miVueloBBDD = new HashMap<Integer, Vuelos>();
 
 		return miVueloBBDD;
