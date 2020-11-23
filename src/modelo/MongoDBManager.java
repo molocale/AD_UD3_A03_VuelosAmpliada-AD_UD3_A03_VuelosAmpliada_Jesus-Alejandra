@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bson.Document;
-import org.bson.types.ObjectId;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
@@ -14,7 +13,6 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
-import com.mongodb.client.result.UpdateResult;
 
 public class MongoDBManager {
 	private MongoClient mongo;
@@ -168,7 +166,7 @@ public class MongoDBManager {
 		Document plazas_disponibles = new Document("plazas_disponibles", vueloSeleccioando.getPlazas_disponibles() - 1);
 		Document auxSet = new Document("$set", plazas_disponibles);
 		coleccion.updateOne(quienCambio, auxSet);
-		
+
 		return primerAsientoDisponible;
 
 	}
