@@ -2,6 +2,7 @@ package controlador;
 
 import modelo.MongoDBManager;
 import modelo.Pasajero;
+import modelo.Vuelos;
 import vista.Principal;
 
 public class Controlador {
@@ -31,7 +32,7 @@ public class Controlador {
 			break;
 
 		case 2:
-			
+
 			//en cancelar:
 			//pedirle el dni y enseñarle los vuelos asociados a su dni
 			//borrar el que elija

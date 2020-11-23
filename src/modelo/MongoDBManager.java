@@ -27,7 +27,14 @@ public class MongoDBManager {
 		
 	}
 	
-	public boolean cancelarVuelo(Pasajero miPasajero, Vuelos vuelo) {
+	public boolean cancelarVuelo(String dniPasajero, Vuelos vuelo) {
+		
+		
+		
+		HashMap<Integer, Vuelos> misVuelosFichero = null ;
+		for (Vuelos value : misVuelosFichero.values()) {
+			
+		}
 		return true;
 		
 	}
