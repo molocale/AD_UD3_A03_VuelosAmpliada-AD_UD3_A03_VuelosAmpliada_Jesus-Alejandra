@@ -1,5 +1,6 @@
 package modelo;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Vuelos {
@@ -14,10 +15,10 @@ public class Vuelos {
 	private String hora;
 	private int plazas_totales;
 	private int plazas_disponibles;
-	private HashMap<Integer, Pasajero> vendidos;
+	private ArrayList<Integer> asientosDisponibles;
 
 	public Vuelos(int id_vuelo, String codigo_vuelo, String origen, String destino, String fecha, String hora,
-			int plazas_totales, int plazas_disponibles, HashMap<Integer, Pasajero> vendidos) {
+			int plazas_totales, int plazas_disponibles) {
 		super();
 		this.id_vuelo = id_vuelo;
 		this.codigo_vuelo = codigo_vuelo;
@@ -27,7 +28,7 @@ public class Vuelos {
 		this.hora = hora;
 		this.plazas_totales = plazas_totales;
 		this.plazas_disponibles = plazas_disponibles;
-		this.vendidos = vendidos;
+		// this.vendidos = vendidos;
 	}
 
 	public int getId_vuelo() {
@@ -92,6 +93,14 @@ public class Vuelos {
 
 	public void setPlazas_disponibles(int plazas_disponibles) {
 		this.plazas_disponibles = plazas_disponibles;
+	}
+
+	public void setAsientos(ArrayList<Integer> arrayList) {
+		this.asientosDisponibles = arrayList;
+	}
+
+	public ArrayList<Integer> getAsientos() {
+		return asientosDisponibles;
 	}
 
 }
