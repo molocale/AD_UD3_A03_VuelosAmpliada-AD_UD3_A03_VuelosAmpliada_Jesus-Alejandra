@@ -6,11 +6,11 @@ import java.util.List;
 
 import org.bson.Document;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
-import com.mongodb.Mongo;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -22,11 +22,12 @@ import com.mongodb.client.model.Updates;
 public class MongoDBManager {
 	private MongoClient mongo;
 	private MongoCollection<Document> coleccion;
+	MongoDatabase db;
 
 	public MongoDBManager() {
 
 		this.mongo = new MongoClient("localhost", 27017);
-		MongoDatabase db = mongo.getDatabase("vuelos2_0");
+		this.db = mongo.getDatabase("vuelos2_0");
 		this.coleccion = db.getCollection("vuelos");
 	}
 
@@ -63,15 +64,37 @@ public class MongoDBManager {
 
 	}
 
-	public boolean cancelarVuelo(Pasajero miPasajero, Vuelos vuelo) {
+	public boolean cancelarVuelo(String codigoVenta, HashMap<String, Reserva> misReservas) {
 
-		// { $pull: { "vendidos":{ "dni":"3" , "codigoVenta": "HI388229" } }
+		Document quienCambio = new Document("codigo", misReservas.get(codigoVenta).getVuelo().getCodigo_vuelo());
+		Document datos = new Document("dni", misReservas.get(codigoVenta).getDni());
+		datos.append("codigoVenta", codigoVenta);
+		Document vendidos = new Document("vendidos", datos);
+		Document aux = new Document("$pull", vendidos);
+
+		coleccion.updateOne(quienCambio, aux);
+
+		int asiento = misReservas.get(codigoVenta).getAsiento();
+
+		Document plazas = new Document("plazas_disponibles", "NumberInt("
+				+ Integer.toString((misReservas.get(codigoVenta).getVuelo().getPlazas_disponibles() + 1)) + ")");
+		Document auxset = new Document("$set", plazas);
+
+		coleccion.updateOne(quienCambio, auxset);
+
+		Document asientosLibres = new Document("asientos_libres", misReservas.get(codigoVenta).getAsiento());
+		Document auxPush = new Document("$push", asientosLibres);
+		coleccion.updateOne(quienCambio, auxPush);
 
 		return true;
-
 	}
 
-	public boolean modificarVuelo(Pasajero miPasajero, Vuelos vuelo) {
+	public boolean modificarVuelo() {
+
+		DBCollection col = (DBCollection) db.getCollection("vuelos");
+
+		// Se crea el documento de filtro
+
 		return true;
 
 	}
@@ -98,12 +121,52 @@ public class MongoDBManager {
 		return todosVuelos;
 	}
 
-	public HashMap<String, Pasajero> mostrarVuelosDelCliente(String dni) {
-		HashMap<String, Pasajero> misPasajeros = new HashMap<String, Pasajero>();
+	public HashMap<String, Reserva> mostrarVuelosDelCliente(String dniPasajero) {
+		HashMap<String, Reserva> misReservas = new HashMap<String, Reserva>();
+		FindIterable<Document> fi = coleccion.find();
+		MongoCursor<Document> cursor = fi.cursor();
 
-	
+		while (cursor.hasNext()) {
+			Document doc = cursor.next();
 
-	return misPasajeros;
+			if (doc.get("vendidos") != null) {
+				ArrayList<Document> reservasVendidas = (ArrayList<Document>) doc.get("vendidos");
+//				System.out.println(reservasVendidas);
+//				System.out.println(reservasVendidas.get(0));
+//				System.out.println(reservasVendidas.get(0).get("asiento"));
+//				System.out.println(reservasVendidas.get(0).get("dni"));
+//				System.out.println(reservasVendidas.get(0).get("apellido"));
+//				System.out.println(reservasVendidas.get(0).get("nombre"));
+//				System.out.println(reservasVendidas.get(1).get("asiento"));
+//				System.out.println(reservasVendidas.get(1).get("dni"));
+//				System.out.println(reservasVendidas.get(1).get("apellido"));
+//				System.out.println(reservasVendidas.get(1).get("nombre"));
+
+				for (Document it : reservasVendidas) {
+
+					if (it.getString("dniPagador").equals(dniPasajero)) {
+
+						Vuelos miVu = new Vuelos(doc.getInteger("id").intValue(), doc.getString("codigo"),
+								doc.getString("origen"), doc.getString("destino"), doc.getString("fecha"),
+								doc.getString("hora"), doc.getInteger("plazas_totales").intValue(),
+								doc.getInteger("plazas_disponibles").intValue());
+
+						Reserva esta = new Reserva(it.getInteger("asiento"), it.getString("dni"),
+								it.getString("apellido"), it.getString("nombre"), it.getString("dniPagador"),
+								Integer.parseInt(it.getString("tarjeta")), it.getString("codigoVenta"), miVu);
+
+						misReservas.put(it.getString("codigoVenta"), esta);
+					}
+				}
+			}
+		}
+		return misReservas;
+
+//		for (Reserva value : misReservas.values()) {
+//			System.out.println(value.getApellido());
+//		}
+
+		
 
 	}
 
