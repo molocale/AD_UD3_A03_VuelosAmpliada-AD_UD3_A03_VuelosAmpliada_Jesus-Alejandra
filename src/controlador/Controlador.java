@@ -1,7 +1,10 @@
 package controlador;
 
+import java.util.HashMap;
+
 import modelo.MongoDBManager;
 import modelo.Pasajero;
+import modelo.Reserva;
 import modelo.Vuelos;
 import vista.Principal;
 
@@ -52,14 +55,26 @@ public class Controlador {
 			break;
 
 		case "B":
+			String dniPasajero = miVista.respuestas("Introduzca su dni", true);
+			// miVista.convertirHashAstring(miMongo.mostrarTodosLosVuelos());
+			HashMap<String, Reserva> misReservas = miMongo.mostrarVuelosDelCliente(dniPasajero);
+			miVista.HashAstringReserva(misReservas);
+			String codigoVenta = miVista.pedirDatosCancelarVuelo();
+			miMongo.cancelarVuelo(codigoVenta, misReservas);
+			miVista.respuestas("Borrado!", false);
+			
+
+//			miVista.HashAstringReserva(miMongo.mostrarVuelosDelCliente(dniPasajero));
+//			String[] arrDatosVueloAborrar = miVista.pedirDatosCancelarVuelo();
+			// miMongo.cancelarVuelo(arrDatosVueloAborrar);
 
 			// en cancelar:
 			// pedirle el dni y enseñarle los vuelos asociados a su dni
 			// borrar el que elija
 
-
 			break;
 		case "C":
+			miMongo.modificarVuelo();
 			// en modificar:
 			// pedirle el dni y enseñarle los vuelos asociados a su dni
 			// recoger los cambios
