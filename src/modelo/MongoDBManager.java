@@ -76,8 +76,8 @@ public class MongoDBManager {
 
 		int asiento = misReservas.get(codigoVenta).getAsiento();
 
-		Document plazas = new Document("plazas_disponibles", "NumberInt("
-				+ Integer.toString((misReservas.get(codigoVenta).getVuelo().getPlazas_disponibles() + 1)) + ")");
+		Document plazas = new Document("plazas_disponibles",
+				(misReservas.get(codigoVenta).getVuelo().getPlazas_disponibles() + 1));
 		Document auxset = new Document("$set", plazas);
 
 		coleccion.updateOne(quienCambio, auxset);
@@ -166,8 +166,6 @@ public class MongoDBManager {
 //			System.out.println(value.getApellido());
 //		}
 
-		
-
 	}
 
 	public Vuelos seleccionarUno(String codigo) {
@@ -217,7 +215,7 @@ public class MongoDBManager {
 		if (vueloSeleccioando.getAsientos() != null) {
 			ArrayList<Integer> asientosDisponibles = vueloSeleccioando.getAsientos();
 
-			System.out.println(asientosDisponibles);
+			//System.out.println(asientosDisponibles);
 			primerAsientoDisponible = asientosDisponibles.get(0).intValue();
 
 			Document asientoAquitar = new Document("asientos_libres", primerAsientoDisponible);
