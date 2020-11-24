@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.bson.Document;
 
-import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -124,8 +123,14 @@ public class MongoDBManager {
 	}
 
 	public HashMap<String, Reserva> mostrarVuelosDelCliente(String dniPasajero) {
+
 		HashMap<String, Reserva> misReservas = new HashMap<String, Reserva>();
-		FindIterable<Document> fi = coleccion.find();
+
+		Document query = new Document("vendidos.dniPagador", dniPasajero);
+		// Document campos = new Document("vendidos", 1);
+
+		// FindIterable<Document> fi = coleccion.find(query).projection(campos);
+		FindIterable<Document> fi = coleccion.find(query);
 		MongoCursor<Document> cursor = fi.cursor();
 
 		while (cursor.hasNext()) {
@@ -133,17 +138,6 @@ public class MongoDBManager {
 
 			if (doc.get("vendidos") != null) {
 				ArrayList<Document> reservasVendidas = (ArrayList<Document>) doc.get("vendidos");
-//				System.out.println(reservasVendidas);
-//				System.out.println(reservasVendidas.get(0));
-//				System.out.println(reservasVendidas.get(0).get("asiento"));
-//				System.out.println(reservasVendidas.get(0).get("dni"));
-//				System.out.println(reservasVendidas.get(0).get("apellido"));
-//				System.out.println(reservasVendidas.get(0).get("nombre"));
-//				System.out.println(reservasVendidas.get(1).get("asiento"));
-//				System.out.println(reservasVendidas.get(1).get("dni"));
-//				System.out.println(reservasVendidas.get(1).get("apellido"));
-//				System.out.println(reservasVendidas.get(1).get("nombre"));
-
 				for (Document it : reservasVendidas) {
 
 					if (it.getString("dniPagador").equals(dniPasajero)) {
@@ -164,6 +158,46 @@ public class MongoDBManager {
 		}
 		return misReservas;
 
+//		HashMap<String, Reserva> misReservas = new HashMap<String, Reserva>();
+//		FindIterable<Document> fi = coleccion.find();
+//		MongoCursor<Document> cursor = fi.cursor();
+//
+//		while (cursor.hasNext()) {
+//			Document doc = cursor.next();
+//
+//			if (doc.get("vendidos") != null) {
+//				ArrayList<Document> reservasVendidas = (ArrayList<Document>) doc.get("vendidos");
+////				System.out.println(reservasVendidas);
+////				System.out.println(reservasVendidas.get(0));
+////				System.out.println(reservasVendidas.get(0).get("asiento"));
+////				System.out.println(reservasVendidas.get(0).get("dni"));
+////				System.out.println(reservasVendidas.get(0).get("apellido"));
+////				System.out.println(reservasVendidas.get(0).get("nombre"));
+////				System.out.println(reservasVendidas.get(1).get("asiento"));
+////				System.out.println(reservasVendidas.get(1).get("dni"));
+////				System.out.println(reservasVendidas.get(1).get("apellido"));
+////				System.out.println(reservasVendidas.get(1).get("nombre"));
+//
+//				for (Document it : reservasVendidas) {
+//
+//					if (it.getString("dniPagador").equals(dniPasajero)) {
+//
+//						Vuelos miVu = new Vuelos(doc.getInteger("id").intValue(), doc.getString("codigo"),
+//								doc.getString("origen"), doc.getString("destino"), doc.getString("fecha"),
+//								doc.getString("hora"), doc.getInteger("plazas_totales").intValue(),
+//								doc.getInteger("plazas_disponibles").intValue());
+//
+//						Reserva esta = new Reserva(it.getInteger("asiento"), it.getString("dni"),
+//								it.getString("apellido"), it.getString("nombre"), it.getString("dniPagador"),
+//								Integer.parseInt(it.getString("tarjeta")), it.getString("codigoVenta"), miVu);
+//
+//						misReservas.put(it.getString("codigoVenta"), esta);
+//					}
+//				}
+//			}
+//		}
+//		return misReservas;
+
 //		for (Reserva value : misReservas.values()) {
 //			System.out.println(value.getApellido());
 //		}
@@ -173,24 +207,39 @@ public class MongoDBManager {
 	public Vuelos seleccionarUno(String codigo) {
 		Vuelos vueloEncontrado = null;
 
-		FindIterable<Document> fi = coleccion.find();
+		// db.vuelos.find({"vendidos.dniPagador":"01"},{"vendidos.$":1}).pretty()
+
+		Document dc = new Document("codigo", codigo);
+
+		FindIterable<Document> fi = coleccion.find(dc);
 		MongoCursor<Document> cursor = fi.cursor();
 
 		while (cursor.hasNext()) {
 			Document doc = cursor.next();
-			if (doc.getString("codigo").equals(codigo)) {
-				vueloEncontrado = new Vuelos(doc.getInteger("id"), doc.getString("codigo"), doc.getString("origen"),
-						doc.getString("destino"), doc.getString("fecha"), doc.getString("hora"),
-						doc.getInteger("plazas_totales"), doc.getInteger("plazas_disponibles"));
+			vueloEncontrado = new Vuelos(doc.getInteger("id"), doc.getString("codigo"), doc.getString("origen"),
+					doc.getString("destino"), doc.getString("fecha"), doc.getString("hora"),
+					doc.getInteger("plazas_totales"), doc.getInteger("plazas_disponibles"));
 
-				if (doc.get("asientos_libres") != null) {
-					vueloEncontrado.setAsientos((ArrayList<Integer>) (doc.get("asientos_libres")));
-				}
+			if (doc.get("asientos_libres") != null) {
+				vueloEncontrado.setAsientos((ArrayList<Integer>) (doc.get("asientos_libres")));
 			}
-
-			// ArrayList<Double> arrList = (ArrayList<Double>) (doc.get("asientos_libres"))
-
 		}
+
+//		while (cursor.hasNext()) {
+//			Document doc = cursor.next();
+//			if (doc.getString("codigo").equals(codigo)) {
+//				vueloEncontrado = new Vuelos(doc.getInteger("id"), doc.getString("codigo"), doc.getString("origen"),
+//						doc.getString("destino"), doc.getString("fecha"), doc.getString("hora"),
+//						doc.getInteger("plazas_totales"), doc.getInteger("plazas_disponibles"));
+//
+//				if (doc.get("asientos_libres") != null) {
+//					vueloEncontrado.setAsientos((ArrayList<Integer>) (doc.get("asientos_libres")));
+//				}
+//			}
+//
+//			// ArrayList<Double> arrList = (ArrayList<Double>) (doc.get("asientos_libres"))
+//
+//		}
 
 		return vueloEncontrado;
 

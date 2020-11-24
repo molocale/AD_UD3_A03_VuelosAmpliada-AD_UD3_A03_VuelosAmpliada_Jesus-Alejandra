@@ -120,7 +120,7 @@ public class Principal {
 			accion = "modificar";
 		}
 
-		System.out.println("Introduce el codigo de venta del vuelo que quiera" + accion + ":");
+		System.out.println("Introduce el codigo de venta del vuelo que quiera " + accion + ":");
 		String codigo = in.next();
 
 		return codigo;
