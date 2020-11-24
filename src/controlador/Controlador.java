@@ -63,6 +63,9 @@ public class Controlador {
 			// pedirle el dni y enseñarle los vuelos asociados a su dni
 			// recoger los cambios
 			// aplicar los cambios y guardarlos
+			
+			String dni = miVista.respuestas("Introduzca su DNI para continuar: ", true);
+			miMongo.mostrarVuelosDelCliente(dni);
 			break;
 
 		default:

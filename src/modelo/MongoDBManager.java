@@ -6,6 +6,11 @@ import java.util.List;
 
 import org.bson.Document;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -59,6 +64,9 @@ public class MongoDBManager {
 	}
 
 	public boolean cancelarVuelo(Pasajero miPasajero, Vuelos vuelo) {
+
+		// { $pull: { "vendidos":{ "dni":"3" , "codigoVenta": "HI388229" } }
+
 		return true;
 
 	}
@@ -90,10 +98,13 @@ public class MongoDBManager {
 		return todosVuelos;
 	}
 
-	public HashMap<String, Vuelos> mostrarVuelosDelCliente() {
-		HashMap<String, Vuelos> miVueloBBDD = new HashMap<String, Vuelos>();
+	public HashMap<String, Pasajero> mostrarVuelosDelCliente(String dni) {
+		HashMap<String, Pasajero> misPasajeros = new HashMap<String, Pasajero>();
 
-		return miVueloBBDD;
+	
+
+	return misPasajeros;
+
 	}
 
 	public Vuelos seleccionarUno(String codigo) {
