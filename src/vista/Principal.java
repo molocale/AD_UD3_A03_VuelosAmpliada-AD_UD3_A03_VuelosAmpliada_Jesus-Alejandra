@@ -24,6 +24,7 @@ public class Principal {
 		System.out.println("¡Bienvenido a nuestra Aerolínea!");
 		while (miControlador.ejecucion())
 			;
+		System.out.println("¡Hasta pronto!");
 
 	}
 
@@ -122,7 +123,7 @@ public class Principal {
 			accion = "modificar";
 		}
 
-		System.out.println("Introduce el codigo de venta del vuelo que quiera" + accion + ":");
+		System.out.println("Introduce el codigo de venta del vuelo que quiera " + accion + ":");
 		String codigo = in.next();
 
 		return codigo;
@@ -133,15 +134,18 @@ public class Principal {
 	public String[] pedirDatosModificar() {
 		Scanner in = new Scanner(System.in);
 
-		String[] datos = new String[5];
+		String[] datos = new String[3];
 
-		System.out.println("Introduce los Nuevos datos");
+		System.out.println("Introduce los nuevos datos");
 		System.out.println("DNI del pasajero:");
 		datos[0] = in.next();
+		validarDni(datos[0]);
 		System.out.println("Primer Apellido del pasajero:");
 		datos[1] = in.next();
+		revisarStrings(datos[1]);
 		System.out.println("Nombre del pasajero:");
 		datos[2] = in.next();
+		revisarStrings(datos[2]);
 
 		return datos;
 	}
@@ -157,7 +161,7 @@ public class Principal {
 		System.out.println("Introduce los datos que se le solicitan a continuación:");
 		System.out.println("DNI del pasajero:");
 		datos[0] = in.next();
-		revisarStrings(datos[0]);
+		validarDni(datos[0]);
 		System.out.println("Primer Apellido del pasajero:");
 		datos[1] = in.next();
 		revisarStrings(datos[1]);
@@ -168,7 +172,7 @@ public class Principal {
 		System.out.println("DNI del pagador:");
 
 		datos[3] = in.next();
-		revisarStrings(datos[3]);
+		validarDni(datos[3]);
 		System.out.println("número de la tarjeta de crédito:");
 		datos[4] = in.next();
 		revisarMisInt(datos[4]);
@@ -189,42 +193,37 @@ public class Principal {
 	}
 
 	public void validarDni(String miDni) {
-		// String dniIntroducido = null;
 
 		Scanner miScanner = new Scanner(System.in);
 
 		Pattern pat = Pattern.compile("[0-9]{7,8}[A-Z a-z]");
 
-		// Matcher mat = pat.matcher(dniIntroducido);
-
-		// System.out.print("Introduce un Dni correcto: ");
-
-		// miDni = miScanner.nextLine();
-
 		Matcher mat = pat.matcher(miDni);
 
 		while (!mat.matches()) {
 
-			System.out.println("El Dni introducido es incorrecto, por favor "
-
-					+ "introduzca un Dni válido.");
-
-			System.out.print("Introduce un Dni correcto:");
-
+			System.out.println("DNI INCORRECTO, VUELVA A INTRODUCIR EL DNI");
 			miDni = miScanner.nextLine();
 
 			mat = pat.matcher(miDni);
 
 		}
 
-		System.out.println("Bien, el Dni " + miDni + " es un Dni válido");
 
 	}
 
 	public String revisarMisInt(String midatoNumerico) {
 		Scanner ins = new Scanner(System.in);
+		
+		while (midatoNumerico.length() != 12) {
+			System.out.println("Formato demasiado corto");
+			midatoNumerico = ins.next();
+			
+		}
+		
 
 		while (!midatoNumerico.matches("[0-9]*")) {
+			
 			System.out.println("Formato no valido, por favor, introduzca valores numericos:");
 			midatoNumerico = ins.next();
 

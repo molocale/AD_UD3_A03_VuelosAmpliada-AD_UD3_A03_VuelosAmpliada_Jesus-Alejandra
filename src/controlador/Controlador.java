@@ -24,9 +24,9 @@ public class Controlador {
 	public boolean ejecucion() {
 		boolean repetimos = true;
 		String opcionElegida = miVista
-				.respuestas("¿Qué quiere hacer? COMPRAR VUELO (A) / CANCELAR VUELO (B) / MODIFICAR VUELO (C)", true);
+				.respuestas("¿Qué quiere hacer? COMPRAR VUELO (1) / CANCELAR VUELO (2) / MODIFICAR VUELO (3)", true);
 		switch (opcionElegida) {
-		case "A":
+		case "1":
 			miVista.convertirHashAstring(miMongo.mostrarTodosLosVuelos());
 			String eleccionVuelo = miVista.respuestas(
 					"Estos son todos nuestros vuelos disponibles, introduce el codigo de vuelo del que desea comprar:",
@@ -54,37 +54,59 @@ public class Controlador {
 
 			break;
 
-		case "B":
-			String dniPasajero = miVista.respuestas("Introduzca su dni", true);
+		case "2":
+			String dniPasajero = miVista.respuestas("Introduzca su DNI (dni del pagador)", true);
 			// miVista.convertirHashAstring(miMongo.mostrarTodosLosVuelos());
 			HashMap<String, Reserva> misReservas = miMongo.mostrarVuelosDelCliente(dniPasajero);
-			miVista.HashAstringReserva(misReservas);
-			String codigoVenta = miVista.pedirDatosCancelarModificar(true);
-			miMongo.cancelarVuelo(codigoVenta, misReservas);
-			miVista.respuestas("Borrado!", false);
+			
+			if (misReservas.size() == 0) {
+				miVista.respuestas("No tiene reservas asociadas al DNI: " +  dniPasajero, false);
+			}else {
+				miVista.HashAstringReserva(misReservas);
+				
+				String codigoVenta = miVista.pedirDatosCancelarModificar(true);
+				while (misReservas.get(codigoVenta) == null) {
+					miVista.respuestas("No hay ninguna reserva asociada a ese codigo", false);
+					
+					codigoVenta = miVista.pedirDatosCancelarModificar(true);
+				}
+				miMongo.cancelarVuelo(codigoVenta, misReservas);
+				miVista.respuestas("Borrado!", false);
+			}
+			
 
 			// en cancelar:
 			// pedirle el dni y enseñarle los vuelos asociados a su dni
 			// borrar el que elija
 
 			break;
-		case "C":
+		case "3":
 
 			// en modificar:
 			// pedirle el dni y enseñarle los vuelos asociados a su dni
 			// recoger los cambios
 			// aplicar los cambios y guardarlos
 
-			String dni = miVista.respuestas("Introduzca su DNI para continuar: ", true);
+			String dni = miVista.respuestas("Introduzca su DNI (dni del pagador) para continuar: ", true);
 			HashMap<String, Reserva> misReservasAmodificar = miMongo.mostrarVuelosDelCliente(dni);
-			miVista.HashAstringReserva(misReservasAmodificar);
-			String codigoVenta2 = miVista.pedirDatosCancelarModificar(false);
-
-			miMongo.modificarVuelo(misReservasAmodificar, codigoVenta2, miVista.pedirDatosModificar());
-			miVista.respuestas("Modificado!", false);
-
+			
+			if (misReservasAmodificar.size() == 0) {
+				miVista.respuestas("Actualmente no tiene ningún vuelo comprado.", false);
+			}else {
+				miVista.HashAstringReserva(misReservasAmodificar);
+		
+				String codigoVenta2 = miVista.pedirDatosCancelarModificar(false);
+				
+				while (misReservasAmodificar.get(codigoVenta2) == null) {
+					miVista.respuestas("No hay ninguna reserva asociada a ese codigo", false);
+					
+					codigoVenta2 = miVista.pedirDatosCancelarModificar(false);
+				}
+				miMongo.modificarVuelo(misReservasAmodificar, codigoVenta2, miVista.pedirDatosModificar());
+				miVista.respuestas("Modificado!", false);
+			}
 			break;
-
+			
 		default:
 			// si lo mete mal
 
@@ -92,7 +114,7 @@ public class Controlador {
 
 		// un desea continuar haciendo otra cosa si desea true si no false:
 
-		String continuar = miVista.respuestas("¿Desea realizar alguna otra operación? 1) si 2) no", true);
+		String continuar = miVista.respuestas("¿Desea realizar alguna otra operación? SI (1) / NO (2)", true);
 
 		if (continuar.equals("2")) {
 			repetimos = false;
