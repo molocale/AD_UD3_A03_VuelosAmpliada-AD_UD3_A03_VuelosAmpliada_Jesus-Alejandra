@@ -7,11 +7,11 @@ public class Reserva {
 	private String apellido;
 	private String nombre;
 	private String dniPagador;
-	private int tarjeta;
+	private String tarjeta;
 	private String codigoVenta;
 	private Vuelos vuelo;
 
-	public Reserva(int asiento, String dni, String apellido, String nombre, String dniPagador, int tarjeta,
+	public Reserva(int asiento, String dni, String apellido, String nombre, String dniPagador, String tarjeta,
 			String codigoVenta, Vuelos vuelo) {
 		this.asiento = asiento;
 		this.dni = dni;
@@ -71,11 +71,11 @@ public class Reserva {
 		this.dniPagador = dniPagador;
 	}
 
-	public int getTarjeta() {
+	public String getTarjeta() {
 		return tarjeta;
 	}
 
-	public void setTarjeta(int tarjeta) {
+	public void setTarjeta(String tarjeta) {
 		this.tarjeta = tarjeta;
 	}
 

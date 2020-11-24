@@ -129,8 +129,7 @@ public class Principal {
 		return codigo;
 
 	}
-	
-	
+
 	public String[] pedirDatosModificar() {
 		Scanner in = new Scanner(System.in);
 
@@ -149,9 +148,6 @@ public class Principal {
 
 		return datos;
 	}
-	
-	
-	
 
 	public String[] pedirDatosPasajero() {
 		Scanner in = new Scanner(System.in);
@@ -183,13 +179,26 @@ public class Principal {
 	public String revisarStrings(String midato) {
 		Scanner in = new Scanner(System.in);
 
-		while (midato.matches("[0-9]*")) {
-			System.out.println("Formato no valido, por favor, introduzca valores no numericos:");
+		while (!palabraCorrect(midato)) {
+
+			System.out.println("Formato no valido (solo puede contener letras):");
 			midato = in.next();
 
 		}
 		return midato;
 
+	}
+
+	public boolean palabraCorrect(String midato) {
+		boolean onlyLetras = true;
+		int i = 0;
+		while (i < midato.length() && onlyLetras) {
+			if (!Character.isLetter(midato.charAt(i))) {
+				onlyLetras = false;
+			}
+			i++;
+		}
+		return onlyLetras;
 	}
 
 	public void validarDni(String miDni) {
@@ -209,21 +218,19 @@ public class Principal {
 
 		}
 
-
 	}
 
 	public String revisarMisInt(String midatoNumerico) {
 		Scanner ins = new Scanner(System.in);
-		
+
 		while (midatoNumerico.length() != 12) {
-			System.out.println("Formato demasiado corto");
+			System.out.println("Formato no valido, la tarjeta debe tener 12 números (todos seguidos)");
 			midatoNumerico = ins.next();
-			
+
 		}
-		
 
 		while (!midatoNumerico.matches("[0-9]*")) {
-			
+
 			System.out.println("Formato no valido, por favor, introduzca valores numericos:");
 			midatoNumerico = ins.next();
 

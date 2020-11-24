@@ -37,6 +37,13 @@ public class Controlador {
 				if (vueloSeleccioando.getPlazas_disponibles() > 0) {
 					String[] arrDatosPasajero = miVista.pedirDatosPasajero();
 
+//					while (miMongo.comprobarPasajeroEnElVuelo(arrDatosPasajero[0],
+//							vueloSeleccioando.getCodigo_vuelo())) {
+//						arrDatosPasajero[0] = miVista.respuestas(
+//								"Ya existe ese dni en nuestro vuelo, no puede haber dos pasajeros con el mismo dni. Introduzca un dni valido:",
+//								true);
+//					}
+
 					if (miMongo.comprarVuelo(arrDatosPasajero, vueloSeleccioando)) {
 						miVista.respuestas("¡Gracias por su compra!", false);
 					} else {
@@ -58,22 +65,21 @@ public class Controlador {
 			String dniPasajero = miVista.respuestas("Introduzca su DNI (dni del pagador)", true);
 			// miVista.convertirHashAstring(miMongo.mostrarTodosLosVuelos());
 			HashMap<String, Reserva> misReservas = miMongo.mostrarVuelosDelCliente(dniPasajero);
-			
+
 			if (misReservas.size() == 0) {
-				miVista.respuestas("No tiene reservas asociadas al DNI: " +  dniPasajero, false);
-			}else {
+				miVista.respuestas("No tiene reservas asociadas al DNI: " + dniPasajero, false);
+			} else {
 				miVista.HashAstringReserva(misReservas);
-				
+
 				String codigoVenta = miVista.pedirDatosCancelarModificar(true);
 				while (misReservas.get(codigoVenta) == null) {
 					miVista.respuestas("No hay ninguna reserva asociada a ese codigo", false);
-					
+
 					codigoVenta = miVista.pedirDatosCancelarModificar(true);
 				}
 				miMongo.cancelarVuelo(codigoVenta, misReservas);
 				miVista.respuestas("Borrado!", false);
 			}
-			
 
 			// en cancelar:
 			// pedirle el dni y enseñarle los vuelos asociados a su dni
@@ -89,30 +95,28 @@ public class Controlador {
 
 			String dni = miVista.respuestas("Introduzca su DNI (dni del pagador) para continuar: ", true);
 			HashMap<String, Reserva> misReservasAmodificar = miMongo.mostrarVuelosDelCliente(dni);
-			
+
 			if (misReservasAmodificar.size() == 0) {
 				miVista.respuestas("Actualmente no tiene ningún vuelo comprado.", false);
-			}else {
+			} else {
 				miVista.HashAstringReserva(misReservasAmodificar);
-		
+
 				String codigoVenta2 = miVista.pedirDatosCancelarModificar(false);
-				
+
 				while (misReservasAmodificar.get(codigoVenta2) == null) {
 					miVista.respuestas("No hay ninguna reserva asociada a ese codigo", false);
-					
+
 					codigoVenta2 = miVista.pedirDatosCancelarModificar(false);
 				}
 				miMongo.modificarVuelo(misReservasAmodificar, codigoVenta2, miVista.pedirDatosModificar());
 				miVista.respuestas("Modificado!", false);
 			}
 			break;
-			
+
 		default:
-			// si lo mete mal
+			miVista.respuestas("Opción incorrecta!", false);
 
 		}
-
-		// un desea continuar haciendo otra cosa si desea true si no false:
 
 		String continuar = miVista.respuestas("¿Desea realizar alguna otra operación? SI (1) / NO (2)", true);
 

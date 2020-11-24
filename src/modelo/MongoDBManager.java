@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.bson.Document;
 
-import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -72,7 +71,6 @@ public class MongoDBManager {
 
 		int asiento = misReservas.get(codigoVenta).getAsiento();
 
-
 		Document plazas = new Document("plazas_disponibles",
 				(misReservas.get(codigoVenta).getVuelo().getPlazas_disponibles() + 1));
 
@@ -83,13 +81,11 @@ public class MongoDBManager {
 		Document asientosLibres = new Document("asientos_libres", misReservas.get(codigoVenta).getAsiento());
 		Document auxPush = new Document("$push", asientosLibres);
 		coleccion.updateOne(quienCambio, auxPush);
-
 		return true;
 	}
 
 	public boolean modificarVuelo(HashMap<String, Reserva> misReservasAmodificar, String codigoVenta2, String[] datos) {
 
-		
 		Document quienCambio = new Document("vendidos.codigoVenta",
 				misReservasAmodificar.get(codigoVenta2).getCodigoVenta());
 		Document cambios = new Document();
@@ -99,9 +95,7 @@ public class MongoDBManager {
 
 		Document auxSet = new Document("$set", cambios);
 		coleccion.updateOne(quienCambio, auxSet);
-
 		return true;
-
 	}
 
 	public HashMap<String, Vuelos> mostrarTodosLosVuelos() {
@@ -124,9 +118,8 @@ public class MongoDBManager {
 		HashMap<String, Reserva> misReservas = new HashMap<String, Reserva>();
 
 		Document query = new Document("vendidos.dniPagador", dniPasajero);
-		//Document campos = new Document("vendidos", 1);
-		
-		//FindIterable<Document> fi = coleccion.find(query).projection(campos);
+		// Document campos = new Document("vendidos", 1);
+		// FindIterable<Document> fi = coleccion.find(query).projection(campos);
 		FindIterable<Document> fi = coleccion.find(query);
 		MongoCursor<Document> cursor = fi.cursor();
 
@@ -146,7 +139,7 @@ public class MongoDBManager {
 
 						Reserva esta = new Reserva(it.getInteger("asiento"), it.getString("dni"),
 								it.getString("apellido"), it.getString("nombre"), it.getString("dniPagador"),
-								Integer.parseInt(it.getString("tarjeta")), it.getString("codigoVenta"), miVu);
+								it.getString("tarjeta"), it.getString("codigoVenta"), miVu);
 
 						misReservas.put(it.getString("codigoVenta"), esta);
 					}
@@ -154,9 +147,8 @@ public class MongoDBManager {
 			}
 		}
 		return misReservas;
-
 	}
-	
+
 	public Vuelos seleccionarUno(String codigo) {
 		Vuelos vueloEncontrado = null;
 		Document query = new Document("codigo", codigo);
@@ -165,21 +157,16 @@ public class MongoDBManager {
 
 		while (cursor.hasNext()) {
 			Document doc = cursor.next();
-				vueloEncontrado = new Vuelos(doc.getInteger("id"), doc.getString("codigo"), doc.getString("origen"),
-						doc.getString("destino"), doc.getString("fecha"), doc.getString("hora"),
-						doc.getInteger("plazas_totales"), doc.getInteger("plazas_disponibles"));
+			vueloEncontrado = new Vuelos(doc.getInteger("id"), doc.getString("codigo"), doc.getString("origen"),
+					doc.getString("destino"), doc.getString("fecha"), doc.getString("hora"),
+					doc.getInteger("plazas_totales"), doc.getInteger("plazas_disponibles"));
 
-				if (doc.get("asientos_libres") != null) {
-					vueloEncontrado.setAsientos((ArrayList<Integer>) (doc.get("asientos_libres")));
-				}
-			
-
+			if (doc.get("asientos_libres") != null) {
+				vueloEncontrado.setAsientos((ArrayList<Integer>) (doc.get("asientos_libres")));
+			}
 			// ArrayList<Double> arrList = (ArrayList<Double>) (doc.get("asientos_libres"))
-
 		}
-
 		return vueloEncontrado;
-
 	}
 
 	public String GenerarCodigo() {
@@ -230,5 +217,20 @@ public class MongoDBManager {
 		return primerAsientoDisponible;
 
 	}
+
+//	public boolean comprobarPasajeroEnElVuelo(String dni, String codigoVuelo) {
+//		boolean existe = false;
+//		Document query = new Document("vendidos.dni", dni);
+//		Document campos = new Document("vendidos", 1);
+//		FindIterable<Document> fi = coleccion.find(query).projection(campos);
+//		MongoCursor<Document> cursor = fi.cursor();
+//		while (cursor.hasNext()) {
+//			Document doc = cursor.next();
+//			if (doc.getString("codigo") == null) {
+//				existe = true;
+//			}
+//		}
+//		return existe;
+//	}
 
 }
