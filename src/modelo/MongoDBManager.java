@@ -6,11 +6,7 @@ import java.util.List;
 
 import org.bson.Document;
 
-import com.mongodb.BasicDBList;
-import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -89,11 +85,17 @@ public class MongoDBManager {
 		return true;
 	}
 
-	public boolean modificarVuelo() {
+	public boolean modificarVuelo(HashMap<String, Reserva> misReservasAmodificar, String codigoVenta2, String[] datos) {
 
-		DBCollection col = (DBCollection) db.getCollection("vuelos");
+		Document quienCambio = new Document("vendidos.codigoVenta",
+				misReservasAmodificar.get(codigoVenta2).getCodigoVenta());
+		Document cambios = new Document();
+		cambios.append("vendidos.$.nombre", datos[2]);
+		cambios.append("vendidos.$.dni", datos[0]);
+		cambios.append("vendidos.$.apellido", datos[1]);
 
-		// Se crea el documento de filtro
+		Document auxSet = new Document("$set", cambios);
+		coleccion.updateOne(quienCambio, auxSet);
 
 		return true;
 
@@ -215,7 +217,7 @@ public class MongoDBManager {
 		if (vueloSeleccioando.getAsientos() != null) {
 			ArrayList<Integer> asientosDisponibles = vueloSeleccioando.getAsientos();
 
-			//System.out.println(asientosDisponibles);
+			// System.out.println(asientosDisponibles);
 			primerAsientoDisponible = asientosDisponibles.get(0).intValue();
 
 			Document asientoAquitar = new Document("asientos_libres", primerAsientoDisponible);

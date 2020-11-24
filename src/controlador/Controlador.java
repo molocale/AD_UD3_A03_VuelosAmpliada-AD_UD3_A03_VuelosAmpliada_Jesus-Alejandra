@@ -59,14 +59,9 @@ public class Controlador {
 			// miVista.convertirHashAstring(miMongo.mostrarTodosLosVuelos());
 			HashMap<String, Reserva> misReservas = miMongo.mostrarVuelosDelCliente(dniPasajero);
 			miVista.HashAstringReserva(misReservas);
-			String codigoVenta = miVista.pedirDatosCancelarVuelo();
+			String codigoVenta = miVista.pedirDatosCancelarModificar(true);
 			miMongo.cancelarVuelo(codigoVenta, misReservas);
 			miVista.respuestas("Borrado!", false);
-			
-
-//			miVista.HashAstringReserva(miMongo.mostrarVuelosDelCliente(dniPasajero));
-//			String[] arrDatosVueloAborrar = miVista.pedirDatosCancelarVuelo();
-			// miMongo.cancelarVuelo(arrDatosVueloAborrar);
 
 			// en cancelar:
 			// pedirle el dni y enseñarle los vuelos asociados a su dni
@@ -74,14 +69,20 @@ public class Controlador {
 
 			break;
 		case "C":
-			miMongo.modificarVuelo();
+
 			// en modificar:
 			// pedirle el dni y enseñarle los vuelos asociados a su dni
 			// recoger los cambios
 			// aplicar los cambios y guardarlos
-			
+
 			String dni = miVista.respuestas("Introduzca su DNI para continuar: ", true);
-			miMongo.mostrarVuelosDelCliente(dni);
+			HashMap<String, Reserva> misReservasAmodificar = miMongo.mostrarVuelosDelCliente(dni);
+			miVista.HashAstringReserva(misReservasAmodificar);
+			String codigoVenta2 = miVista.pedirDatosCancelarModificar(false);
+
+			miMongo.modificarVuelo(misReservasAmodificar, codigoVenta2, miVista.pedirDatosModificar());
+			miVista.respuestas("Modificado!", false);
+
 			break;
 
 		default:
@@ -90,9 +91,12 @@ public class Controlador {
 		}
 
 		// un desea continuar haciendo otra cosa si desea true si no false:
-		/*
-		 * if(no desea continuar) { repetimos= false; }
-		 */
+
+		String continuar = miVista.respuestas("¿Desea realizar alguna otra operación? 1) si 2) no", true);
+
+		if (continuar.equals("2")) {
+			repetimos = false;
+		}
 
 		return repetimos;
 
