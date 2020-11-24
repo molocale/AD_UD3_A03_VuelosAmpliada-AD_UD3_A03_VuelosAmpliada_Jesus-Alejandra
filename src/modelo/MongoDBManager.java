@@ -94,11 +94,7 @@ public class MongoDBManager {
 		DBCollection col = (DBCollection) db.getCollection("vuelos");
 
 		// Se crea el documento de filtro
-		BasicDBObject filtro = new BasicDBObject();
-		filtro.put("codigo", "IB708");
-		DBCursor cur = col.find(filtro);
-		while (cur.hasNext())
-			System.out.println(cur.next());
+
 		return true;
 
 	}
