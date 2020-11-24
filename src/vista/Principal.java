@@ -105,7 +105,7 @@ public class Principal {
 
 	}
 
-	public String pedirDatosCancelarVuelo() {
+	public String pedirDatosCancelarModificar(boolean isBorrar) {
 
 		// String[] misDatos = new String[3];
 
@@ -117,13 +117,37 @@ public class Principal {
 //		misDatos[1] = in.next();
 //		System.out.println("Código de venta: ");
 //		misDatos[2] = in.next();
+		String accion = "borrar";
+		if (!isBorrar) {
+			accion = "modificar";
+		}
 
-		System.out.println("Introduce el codigo de venta del vuelo que quiera borrar:");
+		System.out.println("Introduce el codigo de venta del vuelo que quiera" + accion + ":");
 		String codigo = in.next();
 
 		return codigo;
 
 	}
+	
+	
+	public String[] pedirDatosModificar() {
+		Scanner in = new Scanner(System.in);
+
+		String[] datos = new String[5];
+
+		System.out.println("Introduce los Nuevos datos");
+		System.out.println("DNI del pasajero:");
+		datos[0] = in.next();
+		System.out.println("Primer Apellido del pasajero:");
+		datos[1] = in.next();
+		System.out.println("Nombre del pasajero:");
+		datos[2] = in.next();
+
+		return datos;
+	}
+	
+	
+	
 
 	public String[] pedirDatosPasajero() {
 		Scanner in = new Scanner(System.in);
