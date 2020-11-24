@@ -76,8 +76,7 @@ public class MongoDBManager {
 
 		int asiento = misReservas.get(codigoVenta).getAsiento();
 
-		Document plazas = new Document("plazas_disponibles", "NumberInt("
-				+ Integer.toString((misReservas.get(codigoVenta).getVuelo().getPlazas_disponibles() + 1)) + ")");
+		Document plazas = new Document("plazas_disponibles", (misReservas.get(codigoVenta).getVuelo().getPlazas_disponibles() + 1));
 		Document auxset = new Document("$set", plazas);
 
 		coleccion.updateOne(quienCambio, auxset);
