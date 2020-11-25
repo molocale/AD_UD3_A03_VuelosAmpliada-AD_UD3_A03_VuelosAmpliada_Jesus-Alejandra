@@ -1,0 +1,33 @@
+[{
+        "id": 1,
+        "codigo": "IB706",
+        "origen": "MADRID",
+        "destino": "BARCELONA",
+        "fecha": "2020-12-17",
+        "hora": "18:50",
+        "plazas_totales": 200,
+        "plazas_disponibles": 200
+
+    },
+    {
+        "id": 2,
+        "codigo": "IB707",
+        "origen": "MADRID",
+        "destino": "MURCIA",
+        "fecha": "2020-12-17",
+        "hora": "19:00",
+        "plazas_totales": 200,
+        "plazas_disponibles": 200
+    },
+    {
+        "id": 3,
+        "codigo": "IB708",
+        "origen": "MADRID",
+        "destino": "BILBAO",
+        "fecha": "2020-12-18",
+        "hora": "18:50",
+        "plazas_totales": 200,
+        "plazas_disponibles": 200
+    }
+
+]
